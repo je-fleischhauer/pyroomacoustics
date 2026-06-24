@@ -155,7 +155,9 @@ class RealSphericalHarmonicsDirectivity(Directivity):
         self.condon_shortley_phase = condon_shortley_phase
 
         if orientation is None:
-            orientation = Rotation3D([0.0, 0.0, 0.0])  # identity rotation, no-op default
+            orientation = Rotation3D(
+                [0.0, 0.0, 0.0]
+            )  # identity rotation, no-op default
         elif not isinstance(orientation, Rotation3D):
             raise TypeError(
                 f"orientation must be a Rotation3D object, got {type(orientation).__name__}"
@@ -191,12 +193,16 @@ class RealSphericalHarmonicsDirectivity(Directivity):
         azimuth, colatitude, _ = cart2spher(local_dirs)
 
         return real_sph_harm(
-            self.n, self.m, colatitude, azimuth,
+            self.n,
+            self.m,
+            colatitude,
+            azimuth,
             condon_shortley_phase=self.condon_shortley_phase,
         )[:, np.newaxis]
 
-    def get_response(self, azimuth, colatitude=None, magnitude=False,
-                      frequency=None, degrees=True):
+    def get_response(
+        self, azimuth, colatitude=None, magnitude=False, frequency=None, degrees=True
+    ):
 
         # world-frame cartesian unit vectors
         directions = spher2cart(azimuth, colatitude, degrees=degrees).T
